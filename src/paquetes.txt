@@ -1,0 +1,5 @@
+1,Basico,100,30000
+2,Deportivo,30,20000
+3,HD,200,50000
+4,Peliculas,30,35000
+5,Internacional,180,50000
