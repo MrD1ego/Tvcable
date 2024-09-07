@@ -1,12 +1,12 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
-//import java.util.*;
+import java.util.*;
 
 public class Menu {
     private static List<Cliente> clientes = new ArrayList<>();
-    //private static Subscripcion subscripcion = new Subscripcion();
-    //private static Map<Integer, Paquete> paquetes = PaqueteLoader.getPaquetes();
+    private static Subscripcion subscripcion = new Subscripcion();
+    private static Map<Integer, Paquete> paquetes = PaqueteLoader.getPaquetes();
 
     private static int[] contadorPorSector = new int[7];
 
@@ -20,7 +20,7 @@ public class Menu {
             System.out.println("=== Menú Principal ===");
             System.out.println("1. Agregar Cliente");
             System.out.println("2. Eliminar Cliente");
-            //System.out.println("3. Mostrar Clientes");
+            System.out.println("3. Mostrar Clientes");
             System.out.println("4. Acceder al Menú de Suscripción");
             System.out.println("0. Salir");
             System.out.print("Selecciona una opción: ");
@@ -37,9 +37,9 @@ public class Menu {
                 case 3:
                     mostrarClientes();
                     break;
-                //case 4:
-                    //menuSuscripcion(scanner);
-                    //break;
+                case 4:
+                    menuSuscripcion(scanner);
+                    break;
                 case 0:
                     System.out.println("Saliendo del programa.");
                     break;
@@ -145,6 +145,137 @@ public class Menu {
             case 5: return "San Antonio";
             case 6: return "Cartagena";
             default: return "Desconocido";
+        }
+    }
+    private static void menuSuscripcion(Scanner scanner) {
+        int opcionSuscripcion;
+        do {
+            System.out.println("=== Menú de Suscripción ===");
+            System.out.println("1. Agregar Paquete");
+            System.out.println("2. Eliminar Paquete");
+            System.out.println("3. Mostrar Paquetes del Cliente");
+            System.out.println("4. Total de Canales");
+            System.out.println("5. Total a Pagar");
+            System.out.println("0. Regresar al Menú Principal");
+            System.out.print("Selecciona una opción: ");
+            opcionSuscripcion = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opcionSuscripcion) {
+                case 1:
+                    agregarPaquete(scanner);
+                    break;
+                case 2:
+                    eliminarPaquete(scanner);
+                    break;
+                case 3:
+                    mostrarPaquetes(scanner);
+                    break;
+                case 4:
+                    obtenerTotalCanales(scanner);
+                    break;
+                case 5:
+                    obtenerTotalPago(scanner);
+                    break;
+                case 0:
+                    System.out.println("Regresando al Menú Principal.");
+                    break;
+                default:
+                    System.err.println("Opción no válida.");
+            }
+        } while (opcionSuscripcion != 0);
+    }
+
+    private static void agregarPaquete(Scanner scanner) {
+        System.out.print("ID del cliente: ");
+        int idCliente = scanner.nextInt();
+        scanner.nextLine();
+
+        Cliente cliente = obtenerClientePorID(idCliente);
+        if (cliente != null) {
+            System.out.println("Paquetes disponibles:");
+            for (Paquete paquete : paquetes.values()) {
+                System.out.println(paquete.getId() + " - " + paquete.getNombre());
+            }
+
+            System.out.print("Selecciona el paquete por ID: ");
+            int idPaquete = scanner.nextInt();
+            scanner.nextLine();
+
+            Paquete paqueteSeleccionado = paquetes.get(idPaquete);
+            if (paqueteSeleccionado != null) {
+                subscripcion.agregarPaquete(cliente, paqueteSeleccionado);
+                System.out.println("Paquete agregado exitosamente.");
+            } else {
+                System.err.println("Paquete no encontrado.");
+            }
+        } else {
+            System.err.println("Cliente no encontrado.");
+        }
+    }
+
+    private static void eliminarPaquete(Scanner scanner) {
+        System.out.print("ID del cliente: ");
+        int idCliente = scanner.nextInt();
+        scanner.nextLine();
+
+        Cliente cliente = obtenerClientePorID(idCliente);
+        if (cliente != null) {
+            System.out.println("Paquetes del cliente:");
+            subscripcion.mostrarPaquetes(cliente);
+
+            System.out.print("ID del paquete a eliminar: ");
+            int idPaquete = scanner.nextInt();
+            scanner.nextLine();
+
+            Paquete paqueteAEliminar = paquetes.get(idPaquete);
+            if (paqueteAEliminar != null) {
+                subscripcion.eliminarPaquete(cliente, paqueteAEliminar);
+                System.out.println("Paquete eliminado exitosamente.");
+            } else {
+                System.err.println("Paquete no encontrado.");
+            }
+        } else {
+            System.err.println("Cliente no encontrado.");
+        }
+    }
+
+    private static void mostrarPaquetes(Scanner scanner) {
+        System.out.print("ID del cliente: ");
+        int idCliente = scanner.nextInt();
+        scanner.nextLine();
+
+        Cliente cliente = obtenerClientePorID(idCliente);
+        if (cliente != null) {
+            subscripcion.mostrarPaquetes(cliente);
+        } else {
+            System.err.println("Cliente no encontrado.");
+        }
+    }
+
+    private static void obtenerTotalCanales(Scanner scanner) {
+        System.out.print("ID del cliente: ");
+        int idCliente = scanner.nextInt();
+        scanner.nextLine();
+
+        Cliente cliente = obtenerClientePorID(idCliente);
+        if (cliente != null) {
+            subscripcion.obtenerTotalCanales(cliente);
+        } else {
+            System.err.println("Cliente no encontrado.");
+        }
+    }
+
+    private static void obtenerTotalPago(Scanner scanner) {
+        System.out.print("ID del cliente: ");
+        int idCliente = scanner.nextInt();
+        scanner.nextLine();
+
+        Cliente cliente = obtenerClientePorID(idCliente);
+        if (cliente != null) {
+            subscripcion.obtenerTotalPago(cliente);
+        } else {
+            System.err.println("Cliente no encontrado.");
         }
     }
 }
