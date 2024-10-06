@@ -144,6 +144,37 @@ public class Cliente {
         }
     }
 
+    public static void mostrarClientesPorSector(Scanner scanner) {
+        System.out.println("Selecciona el sector para mostrar los clientes:");
+        System.out.println("1 - Valparaiso");
+        System.out.println("2 - Vina del Mar");
+        System.out.println("3 - Concon");
+        System.out.println("4 - Quilpue");
+        System.out.println("5 - Villa Alemana");
+        System.out.println("6 - San Antonio");
+        System.out.println("7 - Cartagena");
+        System.out.print("Sector (1-7): ");
+        int sectorSeleccionado = scanner.nextInt();
+        scanner.nextLine();
+
+        String sectorNombre = obtenerNombreSector(sectorSeleccionado);
+
+        System.out.println("Clientes del sector: " + sectorNombre);
+        boolean hayClientes = false;
+    
+        for (Cliente cliente : clientes) {
+            if (cliente.getSector().equals(sectorNombre)) {
+                cliente.mostrarCliente();
+                hayClientes = true;
+            }
+        }
+    
+        if (!hayClientes) {
+            System.out.println("No hay clientes en el sector seleccionado.");
+        }
+    }
+
+    
     public static Cliente obtenerClientePorID(int idCliente) {
         for (Cliente cliente : clientes) {
             if (cliente.getId() == idCliente) {
@@ -174,7 +205,7 @@ public class Cliente {
     public void mostrarCliente() {
         System.out.println("ID: " + id);
         System.out.println("Nombre: " + nombreCliente);
-        System.out.println("Dirección: " + direccion);
+        System.out.println("Direccion: " + direccion);
         System.out.println("Sector: " + sector);
     }
 
@@ -251,4 +282,19 @@ public class Cliente {
             System.err.println("Error al cargar los clientes: " + e.getMessage());
         }
     }
+    
+    public static void generarReporte(String filename) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+        writer.write("=== Reporte de Clientes ===");
+        writer.newLine();
+        for (Cliente cliente : clientes) {
+            writer.write("ID: " + cliente.getId() + ", Nombre: " + cliente.getNombreCliente() +
+                         ", Dirección: " + cliente.getDireccion() + ", Sector: " + cliente.getSector());
+            writer.newLine();
+        }
+        System.out.println("Reporte generado en " + filename);
+    } catch (IOException e) {
+        System.err.println("Error al generar el reporte: " + e.getMessage());
+    }
+}
 }
