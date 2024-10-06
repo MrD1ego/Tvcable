@@ -1,0 +1,35 @@
+1,Basico,100,25000,Valparaiso
+2,Deportivo,30,18000,Valparaiso
+3,HD,150,35000,Valparaiso
+4,Peliculas,40,30000,Valparaiso
+5,Internacional,200,45000,Valparaiso
+6,Premium,90,22000,Vina del Mar
+7,Familiar,35,21000,Vina del Mar
+8,Conectividad,180,37000,Vina del Mar
+9,Entretenimiento,50,32000,Vina del Mar
+10,Deportes,210,48000,Vina del Mar
+11,Esencial,110,26000,Concon
+12,Estelar,20,19000,Concon
+13,Cinefilo,160,34000,Concon
+14,Diversion,45,31000,Concon
+15,Optimo,205,47000,Concon
+16,Sencillo,95,23000,Quilpue
+17,Avanzado,30,20000,Quilpue
+18,Divertido,170,36000,Quilpue
+19,Cine,60,33000,Quilpue
+20,Multicanal,200,50000,Quilpue
+21,Familiar,85,24000,Villa Alemana
+22,Confort,32,21500,Villa Alemana
+23,Vanguardista,175,37500,Villa Alemana
+24,Selecto,55,34000,Villa Alemana
+25,Global,195,52000,Villa Alemana
+26,Basico,115,28000,San Antonio
+27,Deportivo,27,20500,San Antonio
+28,HD,165,35500,San Antonio
+29,Peliculas,70,34000,San Antonio
+30,Internacional,205,53000,San Antonio
+31,Familiar,120,29000,Cartagena
+32,Esencial,28,22500,Cartagena
+33,Premium,175,38000,Cartagena
+34,Diversion,65,35000,Cartagena
+35,Global,190,51000,Cartagena
