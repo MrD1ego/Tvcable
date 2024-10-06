@@ -28,7 +28,7 @@ public class Cliente {
         this.id = id;
     }
 
-    public static void agregarCliente(Scanner scanner, String filename) {
+    public static void agregarCliente(Scanner scanner, String filename) throws SectorInvalidoException  {
         System.out.println("\033[H\033[2J");
         System.out.print("Nombre: ");
         String nombre = scanner.nextLine();
@@ -36,20 +36,24 @@ public class Cliente {
         String direccion = scanner.nextLine();
 
         System.out.println("Sectores disponibles:");
-        System.out.println("1 - Valparaíso");
+        System.out.println("1 - Valparaiso");
         System.out.println("2 - Vina del Mar");
-        System.out.println("3 - Concón");
-        System.out.println("4 - Quilpué");
+        System.out.println("3 - Concon");
+        System.out.println("4 - Quilpue");
         System.out.println("5 - Villa Alemana");
         System.out.println("6 - San Antonio");
         System.out.println("7 - Cartagena");
         System.out.print("Sector (1-7): ");
         int sector = scanner.nextInt();
         scanner.nextLine();
-
+        
+        if (sector < 1 || sector > 7) {
+            throw new SectorInvalidoException("El sector seleccionado no es válido. Debe ser un número entre 1 y 7.");
+        }
+        
         String sectorNombre = obtenerNombreSector(sector);
         int id = generarIDDisponible(sector);
-
+        
         Cliente nuevoCliente = new Cliente(nombre, direccion, sectorNombre, id);
         clientes.add(nuevoCliente);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
@@ -151,10 +155,10 @@ public class Cliente {
 
     private static String obtenerNombreSector(int sector) {
         return switch (sector) {
-            case 1 -> "Valparaíso";
+            case 1 -> "Valparaiso";
             case 2 -> "Vina del Mar";
-            case 3 -> "Concón";
-            case 4 -> "Quilpué";
+            case 3 -> "Concin";
+            case 4 -> "Quilpue";
             case 5 -> "Villa Alemana";
             case 6 -> "San Antonio";
             case 7 -> "Cartagena";

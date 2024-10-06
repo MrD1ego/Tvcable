@@ -1,6 +1,9 @@
 com\mycompany\tvproyecto\Cliente.class
-com\mycompany\tvproyecto\Menu.class
 com\mycompany\tvproyecto\Paquete.class
-com\mycompany\tvproyecto\Subscripcion.class
+com\mycompany\tvproyecto\PaqueteException.class
+com\mycompany\tvproyecto\SectorInvalidoException.class
+com\mycompany\tvproyecto\Menu.class
+igu\Pantalla.class
 com\mycompany\tvproyecto\Main.class
+igu\Pantalla$1.class
 com\mycompany\tvproyecto\PaqueteLoader.class

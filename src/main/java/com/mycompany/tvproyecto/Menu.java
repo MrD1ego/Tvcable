@@ -29,7 +29,13 @@ public class Menu {
             scanner.nextLine();
 
             switch (opcion) {
-                case 1 -> Cliente.agregarCliente(scanner, CLIENTE_CSV);
+                case 1 -> {
+                    try {
+                        Cliente.agregarCliente(scanner, CLIENTE_CSV);
+                    } catch (SectorInvalidoException e) {
+                        System.err.println("Error: " + e.getMessage());
+                    }
+                }
                 case 2 -> Cliente.eliminarCliente(scanner, CLIENTE_CSV);
                 case 3 -> Cliente.mostrarClientePorID(scanner);
                 case 4 -> Paquete.menuSuscripcion(scanner);

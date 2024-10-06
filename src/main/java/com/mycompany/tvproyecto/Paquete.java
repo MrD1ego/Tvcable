@@ -18,8 +18,6 @@ public class Paquete {
     private int contadorSuscripciones;
     private final double precioOriginal;
 
-    private static final Subscripcion subscripcion = new Subscripcion();
-
     public Paquete(int id, String nombre, int cantidadCanales, double precio) {
         this.id = id;
         this.nombre = nombre;
@@ -64,7 +62,13 @@ public class Paquete {
             scanner.nextLine();
 
             switch (opcionSuscripcion) {
-                case 1 -> agregarPaquete(scanner);
+                case 1 -> {
+                    try {
+                        agregarPaquete(scanner);
+                    } catch (PaqueteException e) {
+                        System.err.println("Ocurrió un error al agregar el paquete: " + e.getMessage());
+                    }
+                }
                 case 2 -> eliminarPaquete(scanner);
                 case 3 -> mostrarPaquetes(scanner);
                 case 4 -> obtenerTotalCanales(scanner);
@@ -80,7 +84,7 @@ public class Paquete {
         this.precio = this.precio * (1 - porcentaje);
     }
     
-public static void agregarPaquete(Scanner scanner) {
+public static void agregarPaquete(Scanner scanner) throws PaqueteException {
     System.out.print("ID del cliente: ");
     int idCliente = scanner.nextInt();
     scanner.nextLine();
@@ -122,7 +126,6 @@ public static void agregarPaquete(Scanner scanner) {
                 double precioConDescuento = paqueteSeleccionado.getPrecio() * 0.5;
                 System.out.println("Has seleccionado el paquete " + paqueteSeleccionado.getNombre() + " con un 50% de descuento. Precio a pagar: $" + precioConDescuento);
 
-                subscripcion.agregarPaquete(cliente, paqueteSeleccionado);
                 paqueteSeleccionado.incrementarContadorSuscripciones(); // Incrementar contador de suscripciones
 
                 // Guardar cliente y paquete en el CSV
@@ -132,9 +135,6 @@ public static void agregarPaquete(Scanner scanner) {
             } else {
                 // Ofrecer el paquete menos popular como 2x1
                 System.out.println("Has seleccionado el paquete " + paqueteSeleccionado.getNombre() + ". Te ofrecemos el paquete " + paqueteMenosSuscripciones.getNombre() + " como un 2x1, costo $0.");
-                
-                subscripcion.agregarPaquete(cliente, paqueteSeleccionado);
-                subscripcion.agregarPaquete(cliente, paqueteMenosSuscripciones);
                 
                 paqueteSeleccionado.incrementarContadorSuscripciones(); // Incrementar contador de suscripciones
                 paqueteMenosSuscripciones.incrementarContadorSuscripciones(); // Incrementar el contador del paquete menos popular
@@ -152,7 +152,7 @@ public static void agregarPaquete(Scanner scanner) {
             System.err.println("Paquete no encontrado.");
         }
     } else {
-        System.err.println("Cliente no encontrado.");
+        throw new PaqueteException("Error: Cliente con ID " + idCliente + " no encontrado.");
     }
 }
 
