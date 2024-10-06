@@ -2,8 +2,16 @@ import java.util.Scanner;
 
 public class Menu {
 
+    private static final String CLIENTE_CSV = "Cliente.csv";
+
     public static void main(String[] args) {
+
+        PaqueteLoader.cargarPaquetes();
+        
         Scanner scanner = new Scanner(System.in);
+
+        Cliente.cargarClientesDesdeCSV(CLIENTE_CSV);
+
         int opcion;
 
         do {
@@ -19,10 +27,10 @@ public class Menu {
 
             switch (opcion) {
                 case 1:
-                    Cliente.agregarCliente(scanner);
+                    Cliente.agregarCliente(scanner, CLIENTE_CSV);
                     break;
                 case 2:
-                    Cliente.eliminarCliente(scanner);
+                    Cliente.eliminarCliente(scanner, CLIENTE_CSV);
                     break;
                 case 3:
                     Cliente.mostrarClientePorID(scanner);
@@ -31,6 +39,7 @@ public class Menu {
                     Paquete.menuSuscripcion(scanner);
                     break;
                 case 0:
+                    Cliente.guardarClientesEnCSV(CLIENTE_CSV);
                     System.out.println("Saliendo del programa.");
                     break;
                 default:

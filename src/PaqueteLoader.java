@@ -2,10 +2,13 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
+
 
 public class PaqueteLoader {
-    private static Map<Integer, Paquete> paquetes = new HashMap<>();
+    private static Map<String, List<Paquete>> paquetesPorSector = new HashMap<>();
 
     public static void cargarPaquetes() {
         BufferedReader br = null;
@@ -15,7 +18,7 @@ public class PaqueteLoader {
             while ((line = br.readLine()) != null) {
                 String[] partes = line.split(",");
 
-                if (partes.length != 4) {
+                if (partes.length != 5) {
                     System.err.println("Formato incorrecto en la línea: " + line);
                     continue;
                 }
@@ -25,9 +28,15 @@ public class PaqueteLoader {
                     String nombre = partes[1].trim();
                     int cantidadCanales = Integer.parseInt(partes[2].trim());
                     double precio = Double.parseDouble(partes[3].trim());
+                    String sector = partes[4].trim();  // Asumimos que el sector está en la 5ta columna
 
                     Paquete paquete = new Paquete(id, nombre, cantidadCanales, precio);
-                    paquetes.put(id, paquete);
+
+                    // Agregar el paquete al sector correspondiente
+                    List<Paquete> paquetesSector = paquetesPorSector.getOrDefault(sector, new ArrayList<>());
+                    paquetesSector.add(paquete);
+                    paquetesPorSector.put(sector, paquetesSector);
+
                 } catch (NumberFormatException e) {
                     System.err.println("Error en el formato de números en la línea: " + line);
                     e.printStackTrace();
@@ -44,13 +53,10 @@ public class PaqueteLoader {
                 }
             }
         }
+        System.out.println("Paquetes cargados desde paquetes.txt");
     }
 
-    public static Paquete obtenerPaquetePorId(int id) {
-        return paquetes.get(id);
-    }
-
-    public static Map<Integer, Paquete> getPaquetes() {
-        return paquetes;
+    public static List<Paquete> obtenerPaquetesPorSector(String sector) {
+        return paquetesPorSector.getOrDefault(sector, new ArrayList<>());
     }
 }

@@ -68,7 +68,6 @@ public class Subscripcion {
         }
     }
 
-    // Nuevo método agregado
     public int obtenerTotalCanales(Cliente cliente) {
         List<Paquete> paquetes = subscripciones.get(cliente);
         if (paquetes != null) {
@@ -82,5 +81,15 @@ public class Subscripcion {
             System.out.println("El cliente no tiene paquetes.");
             return 0;
         }
+    }
+    public Paquete obtenerPaquetePorId(int idPaquete, Cliente cliente) {
+        List<Paquete> paquetes = subscripciones.get(cliente);
+        if (paquetes != null) {
+            return paquetes.stream()
+                .filter(paquete -> paquete.getId() == idPaquete)
+                .findFirst()
+                .orElse(null);
+        }
+        return null;
     }
 }
