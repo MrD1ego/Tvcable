@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 
-
+/**
+ * Carga los datos del paquete de fomato .txt
+ */
 public class PaqueteLoader {
     private static final Map<String, List<Paquete>> paquetesPorSector = new HashMap<>();
 

@@ -3,8 +3,12 @@ package com.mycompany.tvproyecto;
 import java.util.Scanner;
 
 
+/**
+ * Menu donde se presentan opciones al usuario, dando opciones para manejar clientes
+ * o pasar al menu de las suscripciones y paquetes.
+ */
 public class Menu {
-
+    
     private static final String CLIENTE_CSV = "src/main/java/com/mycompany/tvproyecto/Cliente.csv";
 
     public static void main(String[] args) {

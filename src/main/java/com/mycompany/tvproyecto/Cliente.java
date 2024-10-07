@@ -12,6 +12,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+
+/**
+ * Clase que representa a un cliente del sistema.
+ * Cada cliente tiene un nombre, dirección, sector y un ID único.
+ */
+
 public class Cliente {
     private final String nombreCliente;
     private final String direccion;
@@ -21,6 +27,14 @@ public class Cliente {
     private static final List<Cliente> clientes = new ArrayList<>();
     private static final int[] contadorPorSector = new int[7];
 
+    /**
+     * Constructor para crear un nuevo cliente.
+     * 
+     * nombreCliente Nombre del cliente.
+     * @param direccion Dirección del cliente.
+     * @param sector Sector del cliente.
+     * @param id ID único del cliente.
+     */
     public Cliente(String nombreCliente, String direccion, String sector, int id) {
         this.nombreCliente = nombreCliente;
         this.direccion = direccion;
@@ -28,6 +42,17 @@ public class Cliente {
         this.id = id;
     }
 
+    // ----Métodos de la clase-----
+
+    /**
+     * Opción número uno del Menu.Java
+     * 
+     * Agrega un nuevo cliente a la lista y guarda sus datos en un archivo CSV.
+     * 
+     * @param scanner Scanner para leer la entrada del usuario.
+     * @param filename Nombre del archivo CSV donde se guardará el cliente.
+     * @throws SectorInvalidoException Si el sector ingresado no es válido.
+     */
     public static void agregarCliente(Scanner scanner, String filename) throws SectorInvalidoException  {
         System.out.println("\033[H\033[2J");
         System.out.print("Nombre: ");
@@ -48,7 +73,7 @@ public class Cliente {
         scanner.nextLine();
         
         if (sector < 1 || sector > 7) {
-            throw new SectorInvalidoException("El sector seleccionado no es válido. Debe ser un número entre 1 y 7.");
+            throw new SectorInvalidoException("El sector seleccionado no es valido. Debe ser un numero entre 1 y 7.");
         }
         
         String sectorNombre = obtenerNombreSector(sector);
@@ -66,7 +91,8 @@ public class Cliente {
         System.out.println("Cliente agregado exitosamente.");
         System.out.println("El ID del cliente es: " + id);
     }
-
+    
+    
     private static int generarIDDisponible(int sector) {
         int id = generarID(sector);
         while (obtenerClientePorID(id) != null) {
@@ -75,13 +101,20 @@ public class Cliente {
         }
         return id;
     }
-
+    
+    /**
+     * Opción número dos del Menu.Java
+     * 
+     * Elimina un cliente de la lista y del archivo CSV.
+     * 
+     * @param scanner Scanner para leer la entrada del usuario.
+     * @param filename Nombre del archivo CSV de los clientes.
+     */
     public static void eliminarCliente(Scanner scanner, String filename) {
         System.out.print("ID del cliente a eliminar: ");
         int id = scanner.nextInt();
         scanner.nextLine();
     
-        // Eliminar cliente de la lista
         Cliente clienteAEliminar = obtenerClientePorID(id);
         if (clienteAEliminar != null) {
             clientes.remove(clienteAEliminar);
@@ -91,45 +124,49 @@ public class Cliente {
             return; // Salir si el cliente no se encontró
         }
     
-        // Ahora eliminar del archivo CSV
         eliminarClienteDelCSV(id, filename);
     }
     
-
-    // Método para eliminar el cliente del archivo CSV
+    /**
+     * Busca el cliente en el arhivo y lo elimina
+     * 
+     * @param idCliente ID del cliente
+     * @param filename Nombre del archivo CSV
+     */
     private static void eliminarClienteDelCSV(int idCliente, String filename) {
-        String archivoTemporal = "temp_clientes.csv"; // Archivo temporal para reescribir datos
+        String archivoTemporal = "temp_clientes.csv";
 
         try (BufferedReader br = new BufferedReader(new FileReader(filename));
             BufferedWriter bw = new BufferedWriter(new FileWriter(archivoTemporal))) {
             String linea;
         
-            // Escribir la línea de encabezados en el archivo temporal
             bw.write("ID,Nombre,Direccion,Sector");
             bw.newLine();
         
-            // Lee la primera línea (encabezados) y la ignora
-            br.readLine(); // Esto sigue ignorando los encabezados
+            br.readLine();
         
             while ((linea = br.readLine()) != null) {
                 String[] datos = linea.split(",");
                 if (Integer.parseInt(datos[0]) != idCliente) {
-                    // Si la línea no corresponde al cliente a eliminar, se copia al nuevo archivo
                     bw.write(linea);
                     bw.newLine();
                 }
             }
         } catch (IOException e) {
             System.out.println("Error al eliminar el cliente del archivo CSV.");
-            //e.printStackTrace();
         }
 
-    // Reemplazar el archivo original con el archivo temporal
     new File(filename).delete();
     new File(archivoTemporal).renameTo(new File(filename));
 }
 
-
+    /**
+     * Opción número tres del Menu.Java
+     * 
+     * Muestra la información de un cliente en específico según su ID.
+     * 
+     * @param scanner Scanner para leer la entrada del usuario.
+     */
     public static void mostrarClientePorID(Scanner scanner) {
         System.out.print("Ingrese el ID del cliente a buscar: ");
         int id = scanner.nextInt();
@@ -143,7 +180,14 @@ public class Cliente {
             System.out.println("Cliente no encontrado.");
         }
     }
-
+    
+    /**
+     * Opción número cuatro del Menu.Java
+     * 
+     * Muestra todos los clientes que pertenecen a un sector específico.
+     * 
+     * @param scanner Scanner para leer la entrada del usuario.
+     */
     public static void mostrarClientesPorSector(Scanner scanner) {
         System.out.println("Selecciona el sector para mostrar los clientes:");
         System.out.println("1 - Valparaiso");
@@ -173,8 +217,37 @@ public class Cliente {
             System.out.println("No hay clientes en el sector seleccionado.");
         }
     }
-
     
+    
+    /**
+     * Opción número cinco del Menu.Java
+     * 
+     * Genera un reporte de tipo .txt con los datos de todos los clientes
+     * 
+     * @param filename Nombre del archivo CSV de los clientes.
+     */
+    public static void generarReporte(String filename) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            writer.write("=== Reporte de Clientes ===");
+            writer.newLine();
+            for (Cliente cliente : clientes) {
+                writer.write("ID: " + cliente.getId() + ", Nombre: " + cliente.getNombreCliente() +
+                            ", Dirección: " + cliente.getDireccion() + ", Sector: " + cliente.getSector());
+                writer.newLine();
+            }
+            System.out.println("Reporte generado en " + filename);
+        } catch (IOException e) {
+            System.err.println("Error al generar el reporte: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * 
+     * Obtiene el cliente por ID
+     * 
+     * @param idCliente ID del cliente a buscar.
+     * @return El cliente correspondiente o null si no se encuentra.
+     */
     public static Cliente obtenerClientePorID(int idCliente) {
         for (Cliente cliente : clientes) {
             if (cliente.getId() == idCliente) {
@@ -183,7 +256,12 @@ public class Cliente {
         }
         return null;
     }
-
+    
+    /**
+     * Contiene los sectores que existen.
+     * 
+     * @param sector Sectores disponibles a elegir
+     */
     private static String obtenerNombreSector(int sector) {
         return switch (sector) {
             case 1 -> "Valparaiso";
@@ -196,12 +274,21 @@ public class Cliente {
             default -> "Desconocido";
         };
     }
-
+    
+    /**
+     * Asigna el ID al cliente agregado.
+     * 
+     * @param sector sector del cliente, usado para calcular el id.
+     * @return Retorna el ID del cliente.
+     */
     private static int generarID(int sector) {
         contadorPorSector[sector]++;
         return sector * 1000 + contadorPorSector[sector];
     }
 
+    /**
+     * Método general para mostrar los datos del cliente.
+     */
     public void mostrarCliente() {
         System.out.println("ID: " + id);
         System.out.println("Nombre: " + nombreCliente);
@@ -209,27 +296,17 @@ public class Cliente {
         System.out.println("Sector: " + sector);
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getNombreCliente() {
-        return nombreCliente;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public String getSector() {
-        return sector;
-    }
-
+    /**
+     * 
+     * 
+     * @param filename Nombre del archivo CSV de los clientes.
+     * @return
+     */
     public static Set<Integer> leerIDsExistentes(String filename) {
     Set<Integer> idsExistentes = new HashSet<>();
     try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
         String line;
-        reader.readLine(); // Saltar la primera línea si tiene encabezados
+        reader.readLine();
         while ((line = reader.readLine()) != null) {
             String[] datos = line.split(",");
             if (datos.length > 0) {
@@ -243,6 +320,11 @@ public class Cliente {
         return idsExistentes;
     }
 
+    /**
+     * Guarda los clientes en el archivo CSV
+     * 
+     * @param filename Nombre del archivo CSV donde se guardará el cliente.
+     */
     public static void guardarClientesEnCSV(String filename) {
     Set<Integer> idsExistentes = leerIDsExistentes(filename);
 
@@ -260,11 +342,15 @@ public class Cliente {
             System.err.println("Error al guardar los clientes: " + e.getMessage());
         }
     }
-    //Cargar los clientes del archibo CSV
+    
+    /**
+     * Carga los clientes del archivo CSV
+     * 
+     * @param filename Nombre del archivo CSV donde se guardará el cliente.
+     */
     public static void cargarClientesDesdeCSV(String filename) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
-            // Lee la primera línea (encabezados) y la ignora
             reader.readLine(); 
             while ((line = reader.readLine()) != null) {
                 String[] datos = line.split(",");
@@ -283,18 +369,22 @@ public class Cliente {
         }
     }
     
-    public static void generarReporte(String filename) {
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-        writer.write("=== Reporte de Clientes ===");
-        writer.newLine();
-        for (Cliente cliente : clientes) {
-            writer.write("ID: " + cliente.getId() + ", Nombre: " + cliente.getNombreCliente() +
-                         ", Dirección: " + cliente.getDireccion() + ", Sector: " + cliente.getSector());
-            writer.newLine();
-        }
-        System.out.println("Reporte generado en " + filename);
-    } catch (IOException e) {
-        System.err.println("Error al generar el reporte: " + e.getMessage());
+    
+    //Getter necesarios
+    
+    public int getId() {
+        return id;
     }
-}
+
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public String getSector() {
+        return sector;
+    }
 }
